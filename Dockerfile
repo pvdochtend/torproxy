@@ -2,10 +2,11 @@ FROM alpine
 MAINTAINER David Personette <dperson@gmail.com>
 
 # Install tor and privoxy
-RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata&&\
+RUN apk --no-cache upgrade && \
+    apk --no-cache add bash curl privoxy shadow tini tor tzdata&&\
+    cp /etc/privoxy/config.new /etc/privoxy/config &&\
     file='/etc/privoxy/config' && \
-    sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file && \
+    sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file &&\
     sed -i '/^listen/s|127\.0\.0\.1||' $file && \
     sed -i '/^listen.*::1/s|^|#|' $file && \
     sed -i 's|^\(logfile\)|#\1|' $file && \
